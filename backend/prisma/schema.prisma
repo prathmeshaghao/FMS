@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Company {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Category {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Gender {
+  id        Int       @id @default(autoincrement())
+  name      String    @unique
+  products  Product[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}
+
+model Product {
+  id        Int    @id @default(autoincrement())
+  modelName String @db.VarChar(100)
+
+  companyId  Int
+  categoryId Int
+  genderId   Int
+
+  company  Company  @relation(fields: [companyId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+  gender   Gender   @relation(fields: [genderId], references: [id])
+
+  variants  Variant[]
+  isActive  Boolean   @default(true)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  @@unique([companyId, modelName])
+  @@index([companyId])
+  @@index([categoryId])
+  @@index([genderId])
+}
+
+model Variant {
+  id Int @id @default(autoincrement())
+
+  color String @db.VarChar(50)
+
+  productId Int
+  createdAt DateTime @default(now())
+
+  updatedAt DateTime @updatedAt
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  inventory Inventory[]
+
+  @@unique([productId, color])
+  @@index([productId])
+}
+
+model Inventory {
+  id Int @id @default(autoincrement())
+
+  variantId Int
+
+  size Int
+
+  sku String? @unique
+
+  price Decimal @db.Decimal(10, 2)
+
+  quantity Int
+
+  variant Variant @relation(fields: [variantId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([variantId, size])
+  @@index([variantId])
+}
