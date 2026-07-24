@@ -91,7 +91,7 @@ function VariantCard({
           sx={{ mb: 3 }}
         />
       </Box>
-      {fields.map((item, inventoryIndex) => (
+      {fields.map((_item, inventoryIndex) => (
         <Stack
           direction="row"
           spacing={2}
