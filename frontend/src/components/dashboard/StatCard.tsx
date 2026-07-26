@@ -18,7 +18,7 @@ function StatCard({ title, value }: StatCardProps) {
           <Inventory2RoundedIcon
             sx={{
               color: "#2563EB",
-              fontSize: 30,
+              fontSize: 34,
             }}
           />
         );
@@ -28,7 +28,7 @@ function StatCard({ title, value }: StatCardProps) {
           <WarehouseRoundedIcon
             sx={{
               color: "#16A34A",
-              fontSize: 30,
+              fontSize: 34,
             }}
           />
         );
@@ -38,7 +38,7 @@ function StatCard({ title, value }: StatCardProps) {
           <WarningAmberRoundedIcon
             sx={{
               color: "#F59E0B",
-              fontSize: 30,
+              fontSize: 34,
             }}
           />
         );
@@ -48,7 +48,7 @@ function StatCard({ title, value }: StatCardProps) {
           <CancelRoundedIcon
             sx={{
               color: "#DC2626",
-              fontSize: 30,
+              fontSize: 34,
             }}
           />
         );
@@ -59,7 +59,9 @@ function StatCard({ title, value }: StatCardProps) {
     <Card
       elevation={0}
       sx={{
-        bgcolor: "#FCFDFE",
+        height: "100%",
+        minHeight: 190,
+        background: "linear-gradient(180deg,#FFFFFF 0%,#FAFCFF 100%)",
         border: "1px solid #9baec7",
         borderRadius: 2.5,
         boxShadow: "0 2px 12px rgba(15,23,42,0.04)",
@@ -67,13 +69,21 @@ function StatCard({ title, value }: StatCardProps) {
         transition: "all .25s ease",
 
         "&:hover": {
-          transform: "translateY(-3px)",
+          transform: "translateY(-5px)",
+          transition: "250ms cubic-bezier(.2,.8,.2,1)",
           boxShadow: "0 10px 28px rgba(15,23,42,0.08)",
           borderColor: "#e68d8d",
         },
       }}
     >
-      <CardContent>
+      <CardContent
+        sx={{
+          p: 3,
+          "&:last-child": {
+            pb: 3,
+          },
+        }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -84,8 +94,15 @@ function StatCard({ title, value }: StatCardProps) {
         >
           <Box
             sx={{
-              width: 54,
-              height: 54,
+              width: {
+                xs: 46,
+                md: 54,
+              },
+
+              height: {
+                xs: 46,
+                md: 54,
+              },
               borderRadius: "14px",
               background: "#F3F7FD",
               border: "1px solid #defde3",
@@ -96,12 +113,7 @@ function StatCard({ title, value }: StatCardProps) {
           >
             {getIcon()}
           </Box>
-          <Box
-            sx={{
-              borderBottom: "1px solid #EEF2F7",
-              my: 2,
-            }}
-          />
+
           <Box
             sx={{
               px: 1.2,
@@ -135,9 +147,12 @@ function StatCard({ title, value }: StatCardProps) {
         </Typography>
 
         <Typography
-          variant="h3"
           sx={{
             fontWeight: 700,
+            fontSize: {
+              xs: "2rem",
+              md: "3rem",
+            },
           }}
         >
           {value}

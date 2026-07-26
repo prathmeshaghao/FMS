@@ -12,6 +12,8 @@ import {
   Paper,
   Select,
   TextField,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Chip } from "@mui/material";
@@ -20,12 +22,16 @@ import DeleteProductDialog from "../DeleteProductDialog";
 import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 import { useSnackbar } from "../../context/SnackbarContext";
 import { useQueryClient } from "@tanstack/react-query";
+import InventoryCard from "./InventoryCard";
+// import theme from "../../theme/theme";
 interface Props {
   rows: InventoryItem[];
 }
 
 function InventoryTable({ rows }: Props) {
   const navigate = useNavigate();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(
     null,
@@ -36,13 +42,19 @@ function InventoryTable({ rows }: Props) {
   const [companyFilter, setCompanyFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [genderFilter, setGenderFilter] = useState("");
-  const filterStyle = {
-    width: 180,
+  const companies = [...new Set(rows.map((row) => row.company))];
+  const categories = [...new Set(rows.map((row) => row.category))];
+  const genders = [...new Set(rows.map((row) => row.gender))];
+  // const filterStyle = {
+  //   width: {
+  //     xs: "100%",
+  //     sm: 180,
+  //   },
 
-    "& .MuiOutlinedInput-root": {
-      height: 56,
-    },
-  };
+  //   "& .MuiOutlinedInput-root": {
+  //     height: 56,
+  //   },
+  // };
   const columns: GridColDef[] = [
     {
       field: "company",
@@ -116,7 +128,13 @@ function InventoryTable({ rows }: Props) {
             size="small"
             sx={{
               fontWeight: 600,
-              minWidth: 100,
+              minWidth: {
+                xs: 80,
+                md: 100,
+              },
+              "& .MuiOutlinedInput-root": {
+                height: 56,
+              },
             }}
           />
         );
@@ -190,131 +208,179 @@ function InventoryTable({ rows }: Props) {
       );
     });
   }, [rows, search, companyFilter, categoryFilter, genderFilter]);
-  const companies = [...new Set(rows.map((row) => row.company))];
-  const categories = [...new Set(rows.map((row) => row.category))];
-  const genders = [...new Set(rows.map((row) => row.gender))];
-  return (
-    <>
-      <Box
+  const filters = (
+    <Box
+      sx={{
+        display: "flex",
+        gap: 2,
+        alignItems: "center",
+        flexWrap: "wrap",
+        mb: 3,
+        p: 2.5,
+        bgcolor: "background.paper",
+        borderRadius: 2,
+        border: "1px solid #EAECEF",
+      }}
+    >
+      <TextField
+        placeholder="Search company, model, color..."
+        value={search}
+        onChange={(e) => setSearch(e.target.value)}
+        size="small"
         sx={{
-          display: "flex",
-          gap: 2,
-          alignItems: "center",
-          flexWrap: "wrap",
-          mb: 3,
-          p: 2.5,
-          bgcolor: "background.paper",
-          borderRadius: 2,
-          border: "1px solid #EAECEF",
+          flex: 1,
+          minWidth: {
+            xs: "100%",
+            md: 320,
+          },
+        }}
+      />
+
+      {/* ================================================================== */}
+      <FormControl
+        size="small"
+        sx={{
+          width: {
+            xs: "100%",
+            sm: 180,
+          },
+
+          "& .MuiOutlinedInput-root": {
+            height: 56,
+          },
         }}
       >
-        <TextField
-          placeholder="Search products..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          size="small"
-          sx={{
-            ...filterStyle,
-            flex: 1,
-            minWidth: 320,
-          }}
+        <InputLabel>Company</InputLabel>
+
+        <Select
+          value={companyFilter}
+          label="Company"
+          onChange={(e) => setCompanyFilter(e.target.value)}
+        >
+          <MenuItem value="">All</MenuItem>
+
+          {companies.map((company) => (
+            <MenuItem key={company} value={company}>
+              {company}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      {/* ================================================================== */}
+      <FormControl
+        size="small"
+        sx={{
+          width: {
+            xs: "100%",
+            sm: 180,
+          },
+
+          "& .MuiOutlinedInput-root": {
+            height: 56,
+          },
+        }}
+      >
+        <InputLabel>Category</InputLabel>
+
+        <Select
+          value={categoryFilter}
+          label="Category"
+          onChange={(e) => setCategoryFilter(e.target.value)}
+        >
+          <MenuItem value="">All</MenuItem>
+
+          {categories.map((category) => (
+            <MenuItem key={category} value={category}>
+              {category}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      {/* ================================================================== */}
+      <FormControl
+        size="small"
+        sx={{
+          width: {
+            xs: "100%",
+            sm: 180,
+          },
+
+          "& .MuiOutlinedInput-root": {
+            height: 56,
+          },
+        }}
+      >
+        <InputLabel>Gender</InputLabel>
+
+        <Select
+          value={genderFilter}
+          label="Gender"
+          onChange={(e) => setGenderFilter(e.target.value)}
+        >
+          <MenuItem value="">All</MenuItem>
+
+          {genders.map((gender) => (
+            <MenuItem key={gender} value={gender}>
+              {gender}
+            </MenuItem>
+          ))}
+        </Select>
+      </FormControl>
+
+      {/* ================================================================== */}
+      <Button
+        variant="contained"
+        sx={{
+          width: {
+            xs: "100%",
+            sm: "auto",
+          },
+          height: 56,
+        }}
+        color="secondary"
+        onClick={() => {
+          setSearch("");
+          setCompanyFilter("");
+          setCategoryFilter("");
+          setGenderFilter("");
+        }}
+      >
+        Clear Filters
+      </Button>
+    </Box>
+  );
+
+  if (isMobile) {
+    return (
+      <>
+        {filters}
+
+        {filteredRows.map((row) => (
+          <InventoryCard
+            key={row.inventoryId}
+            row={row}
+            onEdit={() => navigate(`/products/${row.productId}/edit`)}
+            onDelete={() => {
+              setSelectedProductId(row.productId);
+              setOpen(true);
+            }}
+          />
+        ))}
+
+        <DeleteProductDialog
+          open={open}
+          onClose={() => setOpen(false)}
+          onConfirm={handleDelete}
+          loading={deleteMutation.isPending}
         />
-        {/* ================================================================== */}
-        <FormControl
-          size="small"
-          sx={{
-            width: 180,
-
-            "& .MuiOutlinedInput-root": {
-              height: 56,
-            },
-          }}
-        >
-          <InputLabel>Company</InputLabel>
-
-          <Select
-            value={companyFilter}
-            label="Company"
-            onChange={(e) => setCompanyFilter(e.target.value)}
-          >
-            <MenuItem value="">All</MenuItem>
-
-            {companies.map((company) => (
-              <MenuItem key={company} value={company}>
-                {company}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {/* ================================================================== */}
-        <FormControl
-          size="small"
-          sx={{
-            width: 180,
-
-            "& .MuiOutlinedInput-root": {
-              height: 56,
-            },
-          }}
-        >
-          <InputLabel>Category</InputLabel>
-
-          <Select
-            value={categoryFilter}
-            label="Category"
-            onChange={(e) => setCategoryFilter(e.target.value)}
-          >
-            <MenuItem value="">All</MenuItem>
-
-            {categories.map((category) => (
-              <MenuItem key={category} value={category}>
-                {category}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-
-        {/* ================================================================== */}
-        <FormControl
-          size="small"
-          sx={{
-            width: 180,
-
-            "& .MuiOutlinedInput-root": {
-              height: 56,
-            },
-          }}
-        >
-          <InputLabel>Gender</InputLabel>
-
-          <Select
-            value={genderFilter}
-            label="Gender"
-            onChange={(e) => setGenderFilter(e.target.value)}
-          >
-            <MenuItem value="">All</MenuItem>
-
-            {genders.map((gender) => (
-              <MenuItem key={gender} value={gender}>
-                {gender}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        {/* ================================================================== */}
-        <Button
-          variant="contained"
-          color="secondary"
-          onClick={() => {
-            setSearch("");
-            setCompanyFilter("");
-            setCategoryFilter("");
-            setGenderFilter("");
-          }}
-        >
-          Clear Filters
-        </Button>
-      </Box>
+      </>
+    );
+  }
+  return (
+    <>
+      {filters}
       <Paper
         elevation={0}
         sx={{

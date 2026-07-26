@@ -21,7 +21,17 @@ function Inventory() {
 
   return (
     <>
-      <Typography variant="h4" sx={{ mb: 2 }}>
+      <Typography
+        variant="h4"
+        sx={{
+          mb: 3,
+          fontWeight: 700,
+          fontSize: {
+            xs: "1.8rem",
+            md: "2.125rem",
+          },
+        }}
+      >
         Inventory
       </Typography>
       <InventoryTable rows={data ?? []} />

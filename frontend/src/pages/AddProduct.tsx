@@ -23,13 +23,20 @@ function AddProduct() {
     <>
       <Box
         sx={{
-          mb: 5,
+          mb: {
+            xs: 3,
+            md: 5,
+          },
         }}
       >
         <Typography
           variant="h4"
           sx={{
             fontWeight: 700,
+            fontSize: {
+              xs: "1.8rem",
+              md: "2.125rem",
+            },
           }}
         >
           Add Product

@@ -40,15 +40,49 @@ function RecentProductsTable() {
         border: "1px solid #E5E7EB",
       }}
     >
-      <TableContainer>
+      <TableContainer
+        sx={{
+          overflowX: "auto",
+        }}
+      >
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell>Company</TableCell>
-              <TableCell>Model</TableCell>
-              <TableCell>Category</TableCell>
-              <TableCell>Gender</TableCell>
-              <TableCell>Created On</TableCell>
+              <TableCell sx={{ py: 2 }}>Company</TableCell>
+              <TableCell sx={{ py: 2 }}>Model</TableCell>
+              <TableCell
+                sx={{
+                  py: 2,
+                  display: {
+                    xs: "none",
+                    md: "table-cell",
+                  },
+                }}
+              >
+                Category
+              </TableCell>
+              <TableCell
+                sx={{
+                  py: 2,
+                  display: {
+                    xs: "none",
+                    md: "table-cell",
+                  },
+                }}
+              >
+                Gender
+              </TableCell>
+              <TableCell
+                sx={{
+                  py: 2,
+                  display: {
+                    xs: "none",
+                    md: "table-cell",
+                  },
+                }}
+              >
+                Created On
+              </TableCell>
             </TableRow>
           </TableHead>
 
@@ -70,14 +104,21 @@ function RecentProductsTable() {
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      gap: 2,
+                      gap: 1.5,
                     }}
                   >
                     <Avatar
                       sx={{
                         bgcolor: "primary.main",
-                        width: 36,
-                        height: 36,
+                        width: {
+                          xs: 30,
+                          md: 36,
+                        },
+
+                        height: {
+                          xs: 30,
+                          md: 36,
+                        },
                         fontSize: 15,
                       }}
                     >
@@ -85,9 +126,12 @@ function RecentProductsTable() {
                     </Avatar>
 
                     <Typography
-                      variant="body2"
                       sx={{
                         fontWeight: 600,
+                        fontSize: {
+                          xs: 13,
+                          md: 14,
+                        },
                       }}
                     >
                       {product.company.name}

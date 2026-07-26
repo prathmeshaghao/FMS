@@ -143,7 +143,14 @@ function ProductForm({
             mb: 4,
           }}
         >
-          <CardContent>
+          <CardContent
+            sx={{
+              p: {
+                xs: 2,
+                md: 3,
+              },
+            }}
+          >
             <Box sx={{ mb: 4 }}>
               <Typography
                 variant="h5"
@@ -320,6 +327,9 @@ function ProductForm({
             <TextField
               sx={{
                 mt: 3,
+                "& .MuiOutlinedInput-root": {
+                  height: 56,
+                },
               }}
               fullWidth
               label="Model Name"
@@ -350,7 +360,7 @@ function ProductForm({
           }}
         >
           <Typography
-            variant="body2"
+            variant="subtitle1"
             sx={{
               color: "text.secondary",
               mb: 3,
@@ -370,14 +380,24 @@ function ProductForm({
           <Box
             sx={{
               display: "flex",
+              flexDirection: {
+                xs: "column",
+                sm: "row",
+              },
               justifyContent: "space-between",
-              alignItems: "center",
+              alignItems: "stretch",
               flexWrap: "wrap",
               gap: 2,
             }}
           >
             <Button
               variant="outlined"
+              sx={{
+                width: {
+                  xs: "100%",
+                  sm: "auto",
+                },
+              }}
               startIcon={<AddRoundedIcon />}
               onClick={() =>
                 append({
@@ -399,7 +419,10 @@ function ProductForm({
               variant="contained"
               disabled={isLoading}
               sx={{
-                minWidth: 180,
+                width: {
+                  xs: "100%",
+                  sm: 180,
+                },
                 height: 48,
               }}
             >

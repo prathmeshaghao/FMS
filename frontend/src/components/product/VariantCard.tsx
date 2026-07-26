@@ -38,7 +38,10 @@ function VariantCard({
       elevation={0}
       sx={{
         mt: 4,
-        p: 4,
+        p: {
+          xs: 2,
+          md: 4,
+        },
         borderRadius: 4,
         border: "1px solid #E5E7EB",
       }}
@@ -46,8 +49,16 @@ function VariantCard({
       <Box
         sx={{
           display: "flex",
+          flexDirection: {
+            xs: "column",
+            sm: "row",
+          },
+          alignItems: {
+            xs: "flex-start",
+            sm: "center",
+          },
           justifyContent: "space-between",
-          alignItems: "center",
+          gap: 2,
           mb: 3,
         }}
       >
@@ -73,6 +84,12 @@ function VariantCard({
         </Box>
 
         <Button
+          sx={{
+            width: {
+              xs: "100%",
+              sm: "auto",
+            },
+          }}
           color="error"
           variant="text"
           disabled={totalVariants === 1}
@@ -84,23 +101,36 @@ function VariantCard({
       <Box sx={{ mb: 4 }}>
         <TextField
           fullWidth
+          sx={{
+            mb: 3,
+            "& .MuiOutlinedInput-root": {
+              height: 56,
+            },
+          }}
           label="Color"
           {...register(`variants.${index}.color`)}
           error={!!errors?.variants?.[index]?.color}
           helperText={errors?.variants?.[index]?.color?.message}
-          sx={{ mb: 3 }}
         />
       </Box>
-      {fields.map((_item, inventoryIndex) => (
+      {fields.map((item, inventoryIndex) => (
         <Stack
-          direction="row"
+          key={item.id}
+          direction={{
+            xs: "column",
+            md: "row",
+          }}
           spacing={2}
           sx={{
             mb: 2,
-            alignItems: "center",
+            alignItems: {
+              xs: "stretch",
+              md: "center",
+            },
           }}
         >
           <TextField
+            fullWidth
             label="Size"
             type="number"
             {...register(`variants.${index}.inventory.${inventoryIndex}.size`, {
@@ -116,6 +146,7 @@ function VariantCard({
           />
 
           <TextField
+            fullWidth
             label="Price"
             type="number"
             {...register(
@@ -132,9 +163,9 @@ function VariantCard({
           />
 
           <TextField
+            fullWidth
             label="Quantity"
             type="number"
-            fullWidth
             {...register(
               `variants.${index}.inventory.${inventoryIndex}.quantity`,
               { valueAsNumber: true },
@@ -153,7 +184,10 @@ function VariantCard({
             onClick={() => remove(inventoryIndex)}
             disabled={fields.length === 1}
             sx={{
-              alignSelf: "center",
+              alignSelf: {
+                xs: "flex-end",
+                md: "center",
+              },
             }}
           >
             <DeleteOutlineRoundedIcon fontSize="small" />
@@ -164,7 +198,13 @@ function VariantCard({
       <Button
         variant="outlined"
         startIcon={<AddRoundedIcon />}
-        sx={{ mt: 3 }}
+        sx={{
+          mt: 3,
+          width: {
+            xs: "100%",
+            sm: "auto",
+          },
+        }}
         onClick={() =>
           append({
             size: 0,
